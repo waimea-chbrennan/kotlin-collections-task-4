@@ -1,3 +1,5 @@
+import kotlin.math.max
+
 /**
  * Kotlin Collections Task 4- Automation
  *
@@ -181,9 +183,21 @@ fun main() {
  */
 fun placeMonkey(cageList: MutableList<String>, name: String): Int {
     println("+++ Putting $name into a cage")
+    for((index,occupant) in cageList.withIndex()) {
+        if(occupant!=EMPTY) continue
 
-    // YOUR CODE HERE
+        //Make sure that we dont place next to a Violent monkey either side
+        if(cageList.getOrElse(index-1){""}.startsWith('!')) continue
+        if(cageList.getOrElse(index+1){""}.startsWith('!')) continue
+
+        placeMonkeyInCage(cageList,index+1,name)
+        println("+++ Automatically placed $name in cage ${index+1}")
+        return index+1
+    }
+
+    println("+++ No room to place monkey")
     return -1
+
 }
 
 
@@ -200,9 +214,22 @@ fun placeMonkey(cageList: MutableList<String>, name: String): Int {
  * - If all cages are occupied, returns -1
  */
 fun placeViolentMonkey(cageList: MutableList<String>, name: String): Int {
-    println("+++ Putting $name (VIOLENT!) into a cage")
+    println("+++ Putting !$name (VIOLENT!) into a cage")
+    //Iterate over list and check each cage for criteria
 
-    // YOUR CODE HERE
+    for(index in cageList.indices) {
+        if(cageList[index]!=EMPTY) continue
+
+        //Ensure that neighboring cages are empty or not present
+        if(cageList.getOrElse(index-1){EMPTY}!=EMPTY) continue
+        if(cageList.getOrElse(index+1){EMPTY}!=EMPTY) continue
+
+        placeMonkeyInCage(cageList,index+1,"!$name")
+        println("+++ Automatically placed !$name (VIOLENT) in cage ${index+1}")
+        return index + 1
+    }
+
+    println("+++ No room to place monkey")
     return -1
 }
 
@@ -253,17 +280,31 @@ fun placeMonkeyInCage(cageList: MutableList<String>, cageNum: Int, name: String)
  * +--------+--------+--------+--------+----
  */
 fun showMonkeyCages(cageList: List<String>) {
-    val divider = "+--------".repeat(cageList.size) + "+"
+    var banner = "+"
+    var namesAndPipes = "|"
+    var cagesAndPipes = "|"
 
-    println(divider)
-    for (i in 0..<cageList.size) print("| Cage ${i + 1} ")
-    println("|")
+    val longestEntry = max(cageList.maxBy{it.length}.length, "Cage $NUMCAGES".length)
 
-    println(divider)
-    for ((i, name) in cageList.withIndex()) print("| ${name.padEnd(6)} ")
-    println("|")
+    cageList.forEachIndexed { index, cageOccupant ->
+        //Prepare cage num | Cage 1 | Cage 2| ...
+        val cageDescriptor = "Cage ${index+1}"
+        cagesAndPipes += " ${cageDescriptor.padEnd(longestEntry, ' ')} |"
 
-    println(divider)
+        //Prepare banner +--------+--------+
+        banner += "-".repeat(longestEntry + 2)
+        banner += "+"
+
+        //Prepare names | monkey | monkey | monkey |
+        namesAndPipes += " ${cageOccupant.padEnd(longestEntry, ' ')} |"
+    }
+
+    println(banner)
+    println(cagesAndPipes)
+    println(banner)
+    println(namesAndPipes)
+    println(banner)
+    println()
 }
 
 
