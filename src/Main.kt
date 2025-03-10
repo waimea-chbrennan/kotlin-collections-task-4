@@ -182,7 +182,7 @@ fun main() {
  * - If all cages are occupied, returns -1
  */
 fun placeMonkey(cageList: MutableList<String>, name: String): Int {
-    println("+++ Putting $name into a cage")
+    println("+++ Putting $name into a cage".green().bold())
     for((index,occupant) in cageList.withIndex()) {
         if(occupant!=EMPTY) continue
 
@@ -191,11 +191,11 @@ fun placeMonkey(cageList: MutableList<String>, name: String): Int {
         if(cageList.getOrElse(index+1){""}.startsWith('!')) continue
 
         placeMonkeyInCage(cageList,index+1,name)
-        println("+++ Automatically placed $name in cage ${index+1}")
+        println("+++ Automatically placed $name in cage ${index+1}".green())
         return index+1
     }
 
-    println("+++ No room to place monkey")
+    println("+++ No room to place monkey".yellow())
     return -1
 
 }
@@ -214,7 +214,7 @@ fun placeMonkey(cageList: MutableList<String>, name: String): Int {
  * - If all cages are occupied, returns -1
  */
 fun placeViolentMonkey(cageList: MutableList<String>, name: String): Int {
-    println("+++ Putting !$name (VIOLENT!) into a cage")
+    println("+++ Putting !$name (VIOLENT!) into a cage".red().bold())
     //Iterate over list and check each cage for criteria
 
     for(index in cageList.indices) {
@@ -225,11 +225,11 @@ fun placeViolentMonkey(cageList: MutableList<String>, name: String): Int {
         if(cageList.getOrElse(index+1){EMPTY}!=EMPTY) continue
 
         placeMonkeyInCage(cageList,index+1,"!$name")
-        println("+++ Automatically placed !$name (VIOLENT) in cage ${index+1}")
+        println("+++ Automatically placed !$name (VIOLENT) in cage ${index+1}".red())
         return index + 1
     }
 
-    println("+++ No room to place monkey")
+    println("+++ No room to place monkey".yellow())
     return -1
 }
 
@@ -251,7 +251,7 @@ fun placeViolentMonkey(cageList: MutableList<String>, name: String): Int {
 fun setupCages(): MutableList<String> {
     val cageList = mutableListOf<String>()
     for (i in 1..NUMCAGES) cageList.add(EMPTY)
-    println(">>> Created $NUMCAGES empty cages")
+    println(">>> Created $NUMCAGES empty cages".blue())
     return cageList
 }
 
@@ -265,7 +265,7 @@ fun placeMonkeyInCage(cageList: MutableList<String>, cageNum: Int, name: String)
     // Check for blank name
     if (name.isBlank()) return
     // Ok to go ahead and place the monkey
-    println("+++ Putting $name into cage $cageNum")
+    println("+++ Placing $name into cage $cageNum".italic())
     cageList[cageNum - 1] = name
 }
 
@@ -292,19 +292,13 @@ fun showMonkeyCages(cageList: List<String>) {
         cagesAndPipes += " ${cageDescriptor.padEnd(longestEntry, ' ')} |"
 
         //Prepare banner +--------+--------+
-        banner += "-".repeat(longestEntry + 2)
-        banner += "+"
+        banner += "-".repeat(longestEntry + 2) + "+"
 
         //Prepare names | monkey | monkey | monkey |
         namesAndPipes += " ${cageOccupant.padEnd(longestEntry, ' ')} |"
     }
 
-    println(banner)
-    println(cagesAndPipes)
-    println(banner)
-    println(namesAndPipes)
-    println(banner)
-    println()
+    println("${banner.magenta()}\n${cagesAndPipes.magenta()}\n${banner.magenta()}\n${namesAndPipes.magenta()}\n${banner.magenta()}\n")
 }
 
 
@@ -315,6 +309,6 @@ fun clearCage(cageList: MutableList<String>, cageNum: Int) {
     // Check for invalid cage num
     if (cageNum !in 1..cageList.size) return
     // Ok to clear the cage
-    println("--- Clearing cage $cageNum")
+    println("--- Clearing cage $cageNum".blue())
     cageList[cageNum - 1] = EMPTY
 }
