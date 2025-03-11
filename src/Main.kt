@@ -295,7 +295,12 @@ fun showMonkeyCages(cageList: List<String>) {
         banner += "-".repeat(longestEntry + 2) + "+"
 
         //Prepare names | monkey | monkey | monkey |
-        namesAndPipes += " ${cageOccupant.padEnd(longestEntry, ' ')} |"
+        //Violent monkeys are highlighted in red
+        namesAndPipes += if(cageOccupant.startsWith('!')) {
+            " ${cageOccupant.padEnd(longestEntry, ' ')}".red().bold() + " |".magenta()
+        } else {
+            " ${cageOccupant.padEnd(longestEntry, ' ')} |".magenta()
+        }
     }
 
     println("${banner.magenta()}\n${cagesAndPipes.magenta()}\n${banner.magenta()}\n${namesAndPipes.magenta()}\n${banner.magenta()}\n")
